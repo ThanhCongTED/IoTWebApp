@@ -35,3 +35,4 @@ C:\Users\vanco\Dotnet\IoTWebApp\obj\Debug\net8.0\refint\IoTWebApp.dll
 C:\Users\vanco\Dotnet\IoTWebApp\obj\Debug\net8.0\IoTWebApp.pdb
 C:\Users\vanco\Dotnet\IoTWebApp\obj\Debug\net8.0\IoTWebApp.genruntimeconfig.cache
 C:\Users\vanco\Dotnet\IoTWebApp\obj\Debug\net8.0\ref\IoTWebApp.dll
+C:\Users\vanco\Dotnet\IoTWebApp\obj\Debug\net8.0\IoTWebApp.sourcelink.json
