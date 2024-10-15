@@ -1,0 +1,78 @@
+﻿@page
+@model IoTWebApp.Pages.IndexModel
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <title>MQTT Control</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <h2>MQTT Control</h2>
+
+    <button id="onButton">Turn ON</button>
+    <button id="offButton">Turn OFF</button>
+
+    <h3>Received Messages</h3>
+    <ul id="messagesList"></ul>
+
+    <!-- Bao gồm thư viện SignalR client -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+    <script>
+        // Thiết lập kết nối tới SignalR hub
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/mqttHub")
+            .build();
+
+        // Khởi động kết nối
+        connection.start().catch(err => console.error(err.toString()));
+
+        // Xử lý tin nhắn nhận được từ server
+        connection.on("ReceiveMessage", function (message) {
+            const messagesList = document.getElementById("messagesList");
+            const li = document.createElement("li");
+            li.textContent = message;
+            messagesList.appendChild(li);
+        });
+
+        document.getElementById("onButton").onclick = function () {
+            fetch('/api/mqtt/ON', {
+                method: 'POST'
+            }).then(response => {
+                if (response.ok) {
+                    alert('Đã gửi lệnh: ON');
+                } else {
+                    alert('Lỗi khi gửi lệnh ON');
+                }
+            });
+        };
+
+        document.getElementById("offButton").onclick = function () {
+            fetch('/api/mqtt/OFF', {
+                method: 'POST'
+            }).then(response => {
+                if (response.ok) {
+                    alert('Đã gửi lệnh: OFF');
+                } else {
+                    alert('Lỗi khi gửi lệnh OFF');
+                }
+            });
+        };
+
+        // Fetch các tin nhắn đã nhận khi trang được tải
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch('/api/mqtt/messages')
+                .then(response => response.json())
+                .then(data => {
+                    const messagesList = document.getElementById("messagesList");
+                    data.forEach(message => {
+                        const li = document.createElement("li");
+                        li.textContent = message;
+                        messagesList.appendChild(li);
+                    });
+                });
+        });
+    </script>
+</body>
+</html>
