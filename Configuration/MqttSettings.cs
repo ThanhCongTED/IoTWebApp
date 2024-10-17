@@ -11,3 +11,4 @@ namespace IoTWebApp.Configuration
         public string SubscribeTopic { get; set; }
     }
 }
+

@@ -17,8 +17,6 @@ C:\Users\vanco\Dotnet\IoTWebApp\bin\Debug\net8.0\IoTWebApp.pdb
 C:\Users\vanco\Dotnet\IoTWebApp\bin\Debug\net8.0\Microsoft.AspNetCore.SignalR.Client.Core.dll
 C:\Users\vanco\Dotnet\IoTWebApp\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
 C:\Users\vanco\Dotnet\IoTWebApp\bin\Debug\net8.0\MQTTnet.dll
-C:\Users\vanco\Dotnet\IoTWebApp\bin\Debug\net8.0\Newtonsoft.Json.dll
-C:\Users\vanco\Dotnet\IoTWebApp\bin\Debug\net8.0\System.Net.WebSockets.WebSocketProtocol.dll
 C:\Users\vanco\Dotnet\IoTWebApp\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\vanco\Dotnet\IoTWebApp\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\vanco\Dotnet\IoTWebApp\obj\Debug\net8.0\staticwebassets\msbuild.IoTWebApp.Microsoft.AspNetCore.StaticWebAssets.props
@@ -35,3 +33,15 @@ C:\Users\vanco\Dotnet\IoTWebApp\obj\Debug\net8.0\refint\IoTWebApp.dll
 C:\Users\vanco\Dotnet\IoTWebApp\obj\Debug\net8.0\IoTWebApp.pdb
 C:\Users\vanco\Dotnet\IoTWebApp\obj\Debug\net8.0\IoTWebApp.genruntimeconfig.cache
 C:\Users\vanco\Dotnet\IoTWebApp\obj\Debug\net8.0\ref\IoTWebApp.dll
+C:\Users\vanco\Dotnet\IoTWebApp\obj\Debug\net8.0\IoTWebApp.sourcelink.json
+C:\Users\vanco\Dotnet\IoTWebApp\bin\Debug\net8.0\Microsoft.AspNetCore.Connections.Abstractions.dll
+C:\Users\vanco\Dotnet\IoTWebApp\bin\Debug\net8.0\Microsoft.AspNetCore.Http.Connections.Client.dll
+C:\Users\vanco\Dotnet\IoTWebApp\bin\Debug\net8.0\Microsoft.AspNetCore.Http.Connections.Common.dll
+C:\Users\vanco\Dotnet\IoTWebApp\bin\Debug\net8.0\Microsoft.AspNetCore.SignalR.Client.dll
+C:\Users\vanco\Dotnet\IoTWebApp\bin\Debug\net8.0\Microsoft.AspNetCore.SignalR.Common.dll
+C:\Users\vanco\Dotnet\IoTWebApp\bin\Debug\net8.0\Microsoft.AspNetCore.SignalR.Protocols.Json.dll
+C:\Users\vanco\Dotnet\IoTWebApp\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\vanco\Dotnet\IoTWebApp\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\vanco\Dotnet\IoTWebApp\bin\Debug\net8.0\Microsoft.Extensions.Features.dll
+C:\Users\vanco\Dotnet\IoTWebApp\bin\Debug\net8.0\Microsoft.Extensions.Logging.dll
+C:\Users\vanco\Dotnet\IoTWebApp\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll

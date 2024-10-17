@@ -13,7 +13,7 @@ using MQTTnet.Protocol;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Thêm các dịch vụ vào container.
+// Thêm các dịch vụ vào container
 builder.Services.AddRazorPages();
 builder.Services.AddControllers();
 
@@ -48,7 +48,7 @@ var mqttOptions = new MqttClientOptionsBuilder()
     .WithTls()
     .Build();
 
-// Kết nối tới MQTT broker với xử lý lỗi và retry logic
+// Kết nối tới MQTT broker
 async Task ConnectMqttAsync()
 {
     try
@@ -59,7 +59,6 @@ async Task ConnectMqttAsync()
     catch (Exception ex)
     {
         Console.WriteLine($"### KẾT NỐI THẤT BẠI ###\n{ex.Message}");
-        // Triển khai logic retry hoặc xử lý theo cách khác nếu cần
     }
 }
 
@@ -68,13 +67,13 @@ await ConnectMqttAsync();
 // Đăng ký vào các topics
 var topicFilter = new MqttTopicFilterBuilder()
     .WithTopic(mqttSettings.SubscribeTopic)
-    .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.ExactlyOnce) // QoS 2
+    .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.ExactlyOnce)
     .Build();
 
 await mqttClient.SubscribeAsync(topicFilter);
 Console.WriteLine($"Đã đăng ký vào topic '{mqttSettings.SubscribeTopic}'");
 
-// Khởi tạo lưu trữ tin nhắn an toàn trong môi trường đa luồng
+// Khởi tạo lưu trữ tin nhắn
 var receivedMessages = new ConcurrentBag<string>();
 builder.Services.AddSingleton(receivedMessages); // Registering as ConcurrentBag<string>
 
@@ -87,7 +86,7 @@ var app = builder.Build();
 // Sử dụng CORS
 app.UseCors("AllowAllOrigins");
 
-// Cấu hình pipeline xử lý HTTP request.
+// Cấu hình pipeline xử lý HTTP request
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
@@ -96,9 +95,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
 
 // Đăng ký các endpoint
@@ -119,7 +116,7 @@ mqttClient.ApplicationMessageReceivedAsync += async e =>
     await hubContext.Clients.All.SendAsync("ReceiveMessage", message);
 };
 
-// Ngắt kết nối nhẹ nhàng khi ứng dụng dừng
+// Ngắt kết nối khi ứng dụng dừng
 var lifetime = app.Lifetime;
 lifetime.ApplicationStopping.Register(async () =>
 {
