@@ -7,18 +7,21 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MQTT SignalR Demo</title>
-    <link rel="stylesheet" href="~/css/site.css" /> <!-- Thêm file CSS nếu cần -->
+    <link rel="stylesheet" href="~/css/site.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.7/signalr.min.js"></script>
-    <script src="~/js/site.js" defer></script> <!-- Đảm bảo đường dẫn đúng -->
+    <script src="~/js/site.js" defer></script>
 </head>
 <body>
     <div class="container">
-        <h1>Demo Kết Nối MQTT và SignalR</h1>
-        <button id="toggleButton" onclick="toggleSwitch()">Bật</button>
+        <h1>Kết Nối MQTT và SignalR</h1>
+        <p>Chạm vào nút để bật/tắt thiết bị và theo dõi trạng thái trong thời gian thực.</p>
+        <div class="toggle-container">
+            <button id="toggleButton" class="toggle-btn off" onclick="toggleSwitch()">Bật</button>
+        </div>
     </div>
 
     <footer>
-        <p>&copy; 2024 - Dự án MQTT SignalR Demo</p>
+        <p>&copy; 2024 - Dự án MQTT SignalR Demo | Phát triển bởi Bạn</p>
     </footer>
 </body>
 </html>

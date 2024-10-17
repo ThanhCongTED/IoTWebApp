@@ -1,22 +1,74 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
+/* Tổng thể */
 body {
-  margin-bottom: 60px;
+  font-family: 'Arial', sans-serif;
+  background-color: #f0f4f7;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Container căn giữa nội dung */
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+}
+
+/* Định dạng tiêu đề */
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #0073e6;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Toggle Button Container */
+.toggle-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Nút bật/tắt thiết kế hình tròn */
+.toggle-btn {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: none;
+  background-color: #ff4b5c; /* Màu đỏ khi tắt */
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background-color 0.4s ease, transform 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Trạng thái "Bật" */
+.toggle-btn.on {
+  background-color: #4caf50; /* Màu xanh khi bật */
+}
+
+/* Trạng thái "Tắt" */
+.toggle-btn.off {
+  background-color: #ff4b5c; /* Màu đỏ khi tắt */
+}
+
+/* Hiệu ứng nhấn nút */
+.toggle-btn:active {
+  transform: scale(0.9); /* Thu nhỏ nút khi nhấn */
+}
+
+/* Căn chỉnh footer */
+footer {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
 }
