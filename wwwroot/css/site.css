@@ -72,3 +72,100 @@ footer {
   font-size: 0.9rem;
   color: #666;
 }
+/* Container của các nút */
+.button-container {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px;
+}
+
+/* Định dạng nút hình chữ nhật */
+.rectangular-button {
+  width: 100px;
+  height: 150px;
+  border-radius: 15px; /* Bo góc cho nút hình chữ nhật */
+  background-color: lightgray;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+/* Trạng thái bật của nút */
+.rectangular-button.on {
+  background-color: green; /* Màu khi bật */
+}
+
+/* Trạng thái tắt của nút */
+.rectangular-button.off {
+  background-color: red; /* Màu khi tắt */
+}
+/* Container của thiết bị */
+/* Container của thiết bị */
+/* Container chứa các nút nhấn */
+/* Container chứa các nút nhấn */
+.device-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(to bottom, #004e92, #000428); /* Nền gradient */
+}
+
+/* Các nút nhấn (thiết bị) */
+.device {
+  width: 120px;
+  height: 200px;
+  border-radius: 05px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  cursor: pointer;
+  position: relative;
+  color: white;
+  margin: 0 5px;
+  background: linear-gradient(to bottom, #3a7bd5, #3a6073); /* Màu nền khi tắt */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Hiệu ứng nổi lên khi off */
+  overflow: hidden; /* Để che các phần ngoài của nút khi thụt vào */
+}
+
+/* Trạng thái OFF (nút nổi lên) */
+.device.off {
+  background: linear-gradient(to bottom, #3a7bd5, #3a6073); /* Màu khi tắt */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Hiệu ứng bóng nổi */
+}
+
+/* Trạng thái ON (nút chìm xuống) */
+.device.on {
+  background: linear-gradient(to bottom, #a8e063,#56ab2f ); /* Màu khi bật */
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2); /* Bóng thụt vào khi bật */
+}
+
+/* Hiển thị nhãn của thiết bị */
+.device p {
+  position: absolute;
+  bottom: 10px;
+  font-size: 16px;
+}
+
+/* Cạnh dưới của nút chuyển động */
+.device::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 20px; /* Chiều cao của cạnh dưới di chuyển */
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
+  transition: height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+/* Khi bật, cạnh dưới biến mất */
+.device.on::before {
+  opacity: 0; /* Ẩn cạnh dưới khi bật */
+  height: 0; /* Chiều cao bằng 0 khi bật */
+}

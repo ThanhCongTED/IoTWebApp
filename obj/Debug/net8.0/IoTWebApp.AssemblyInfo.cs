@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("IoTWebApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9a4c64c9ef4354f9aa23e5d03e356dc32a1cdd0c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+18157bfea3e1472c283c450fa248760a131108c5")]
 [assembly: System.Reflection.AssemblyProductAttribute("IoTWebApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("IoTWebApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

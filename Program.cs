@@ -110,10 +110,11 @@ mqttClient.ApplicationMessageReceivedAsync += async e =>
 {
     var message = Encoding.UTF8.GetString(e.ApplicationMessage.PayloadSegment);
     receivedMessages.Add(message);
+    var topic = e.ApplicationMessage.Topic;
     Console.WriteLine($"Nhận được tin nhắn: {message}");
 
     // Thông báo tới tất cả các SignalR clients kết nối
-    await hubContext.Clients.All.SendAsync("ReceiveMessage", message);
+    await hubContext.Clients.All.SendAsync("ReceiveMessage", topic, message);
 };
 
 // Ngắt kết nối khi ứng dụng dừng

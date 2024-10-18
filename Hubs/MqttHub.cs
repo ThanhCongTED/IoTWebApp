@@ -9,36 +9,25 @@ namespace IoTWebApp.Hubs
     {
         private readonly IMqttClient mqttClient;
 
-        // Biến lưu trữ trạng thái hiện tại
-        private static bool isOn; // Giả sử trạng thái này được lưu trữ ở đây
-
-        // Constructor để inject IMqttClient
         public MqttHub(IMqttClient mqttClient)
         {
             this.mqttClient = mqttClient;
         }
 
-        // Phương thức để gửi tín hiệu đến MQTT broker
-        public async Task SendMessage(string message)
+        // Phương thức gửi tín hiệu đến MQTT broker
+        public async Task SendMessage(string topic, string message)
         {
             // Gửi tín hiệu tới MQTT broker
             await mqttClient.PublishAsync(new MqttApplicationMessageBuilder()
-                .WithTopic("your/topic") // Thay đổi "your/topic" thành topic mà bạn muốn gửi
+                .WithTopic(topic)
                 .WithPayload(message)
-                .WithQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.ExactlyOnce) // Sử dụng QoS 2
+                .WithQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.ExactlyOnce)
                 .WithRetainFlag()
                 .Build());
-            
-            Console.WriteLine($"Gửi tin nhắn: {message}");
-            isOn = message == "on"; // Cập nhật trạng thái khi gửi tin nhắn
-            await Clients.All.SendAsync("ReceiveMessage", message);
-        }
 
-        // Phương thức để lấy trạng thái hiện tại từ server
-        public async Task GetCurrentState()
-        {
-            // Gửi trạng thái hiện tại cho client
-            await Clients.Caller.SendAsync("ReceiveMessage", isOn ? "on" : "off");
+            Console.WriteLine($"Gửi tin nhắn: {message} tới topic: {topic}");
+            // Thông báo tới tất cả clients về trạng thái mới
+            await Clients.All.SendAsync("ReceiveMessage", topic, message);
         }
     }
 }
