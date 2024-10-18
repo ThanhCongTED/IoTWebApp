@@ -142,7 +142,7 @@ footer {
 
 /* Trạng thái ON (nút chìm xuống) */
 .device.on {
-  background: linear-gradient(to bottom, #a8e063,#56ab2f ); /* Màu khi bật */
+  background: linear-gradient(to bottom, #56ab2f, #a8e063); /* Màu khi bật */
   box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2); /* Bóng thụt vào khi bật */
 }
 
@@ -174,8 +174,8 @@ footer {
 /* Các trạng thái cho indicator */
 .indicator {
   display: inline-block;
-  width: 20px; /* Kích thước của điểm tròn */
-  height: 20px; /* Kích thước của điểm tròn */
+  width: 15px; /* Kích thước của điểm tròn */
+  height: 15px; /* Kích thước của điểm tròn */
   border-radius: 50%; /* Hình tròn */
   position: absolute; /* Để có thể định vị chính xác */
   top: 5px; /* Đặt điểm tròn lên trên */
@@ -188,7 +188,7 @@ footer {
 }
 
 .indicator.off {
-    background-color:  #06156b; /* Màu đỏ cho trạng thái Off */
+    background-color:  #0660dd; /* Màu đỏ cho trạng thái Off */
 }
 
 /* Định dạng nhãn thiết bị */
