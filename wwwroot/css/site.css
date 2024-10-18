@@ -131,6 +131,7 @@ footer {
   background: linear-gradient(to bottom, #3a7bd5, #3a6073); /* Màu nền khi tắt */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Hiệu ứng nổi lên khi off */
   overflow: hidden; /* Để che các phần ngoài của nút khi thụt vào */
+
 }
 
 /* Trạng thái OFF (nút nổi lên) */
@@ -168,4 +169,31 @@ footer {
 .device.on::before {
   opacity: 0; /* Ẩn cạnh dưới khi bật */
   height: 0; /* Chiều cao bằng 0 khi bật */
+}
+
+/* Các trạng thái cho indicator */
+.indicator {
+  display: inline-block;
+  width: 20px; /* Kích thước của điểm tròn */
+  height: 20px; /* Kích thước của điểm tròn */
+  border-radius: 50%; /* Hình tròn */
+  position: absolute; /* Để có thể định vị chính xác */
+  top: 5px; /* Đặt điểm tròn lên trên */
+  left: 50%; /* Canh giữa theo chiều ngang */
+  transform: translateX(-50%); /* Đẩy về giữa */
+}
+
+.indicator.on {
+    background-color: red; /* Màu xanh cho trạng thái On */
+}
+
+.indicator.off {
+    background-color:  #06156b; /* Màu đỏ cho trạng thái Off */
+}
+
+/* Định dạng nhãn thiết bị */
+.device p {
+    margin-top: 25px; /* Khoảng cách giữa điểm và chữ */
+    font-size: 16px;
+    color: white; /* Màu chữ */
 }

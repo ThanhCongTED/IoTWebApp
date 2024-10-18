@@ -38,13 +38,18 @@ function sendMessage(deviceId, status) {
 // Hàm để cập nhật giao diện của các nút
 function updateButtonState(deviceId) {
     const device = document.getElementById(`device${deviceId}`);
-
+    const indicator = document.getElementById(`indicator${deviceId}`);
+    
     if (deviceStates[deviceId]) {
         device.classList.add("on");
         device.classList.remove("off");
+        indicator.classList.add("on");
+        indicator.classList.remove("off");
     } else {
         device.classList.add("off");
         device.classList.remove("on");
+        indicator.classList.add("off");
+        indicator.classList.remove("on");
     }
 }
 

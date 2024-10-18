@@ -16,16 +16,24 @@
         <h1>Kết Nối MQTT và SignalR</h1>
         <p>Chạm vào nút để bật/tắt thiết bị và theo dõi trạng thái trong thời gian thực.</p>
 
-        <div class="device-container">
-            <div class="device 1" id="device1" onclick="toggleSwitch(1)">
-                <p id="label1">Quạt hút</p>
-        </div>
-            <div class="device 2" id="device2" onclick="toggleSwitch(2)">
-                <p id="label2">Đèn LED</p>
-        </div>
-            <div class="device 3" id="device3" onclick="toggleSwitch(3)">
-                <p id="label3">Đèn</p>
-        </div>
+<div class="device-container">
+<div id="device1" class="device" onclick="toggleSwitch(1)">
+    <span id="indicator1" class="indicator off"></span>
+    <span class="device-label">Thiết bị 1</span>
+</div>
+<div id="device2" class="device" onclick="toggleSwitch(2)">
+    <span id="indicator2" class="indicator off"></span>
+    <span class="device-label">Thiết bị 2</span>
+</div>
+<div id="device3" class="device" onclick="toggleSwitch(3)">
+    <span id="indicator3" class="indicator off"></span>
+    <span class="device-label">Thiết bị 3</span>
+</div>
+
+</div>
+
+</div>
+
 </div>
 
 </div>
