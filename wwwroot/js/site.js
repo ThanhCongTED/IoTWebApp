@@ -1,7 +1,7 @@
 ﻿let deviceStates = {
     1: false, // Trạng thái của thiết bị 1 (off)
     2: false, // Trạng thái của thiết bị 2 (off)
-    3: false   // Trạng thái của thiết bị 3 (on)
+    3: false   // Trạng thái của thiết bị 3 (off)
 };
 
 // Khởi tạo kết nối SignalR
@@ -66,6 +66,19 @@ function initializeButtonState() {
 connection.start()
     .then(() => {
         console.log("Kết nối SignalR thành công.");
+
+        // Yêu cầu trạng thái hiện tại từ server khi kết nối thành công
+        connection.invoke("GetCurrentState")
+            .then(initialState => {
+                console.log("Trạng thái ban đầu:", initialState);
+                for (let deviceId in initialState) {
+                    deviceStates[deviceId] = initialState[deviceId] === "on"; // Cập nhật trạng thái ban đầu từ server
+                    updateButtonState(deviceId); // Cập nhật giao diện
+                }
+            })
+            .catch(err => console.error("Lỗi khi lấy trạng thái ban đầu:", err));
+
+        // Lắng nghe sự kiện khi có tin nhắn MQTT đến từ server
         connection.on("ReceiveMessage", (topic, message) => {
             // Xử lý tin nhắn nhận từ MQTT
             let deviceId;
@@ -83,6 +96,15 @@ connection.start()
             deviceStates[deviceId] = message.trim() === "on";
             updateButtonState(deviceId);
         });
-        initializeButtonState(); // Khởi tạo trạng thái khi kết nối thành công
+
     })
-    .catch(err => console.error(err.toString()));
+    .catch(err => console.error("Lỗi khi kết nối SignalR:", err));
+
+// Gọi phương thức initializeButtonState với trạng thái nhận được từ MQTT
+connection.on("CurrentState", (initialState) => {
+    console.log("Nhận trạng thái ban đầu từ server:", initialState);
+    for (let deviceId in initialState) {
+        deviceStates[deviceId] = initialState[deviceId] === "on"; // Cập nhật trạng thái ban đầu từ server
+        updateButtonState(deviceId); // Cập nhật giao diện
+    }
+});
