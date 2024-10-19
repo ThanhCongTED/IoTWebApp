@@ -104,6 +104,8 @@ app.MapControllers();
 app.MapHub<MqttHub>("/mqttHub");
 
 // Xử lý nhận tin nhắn MQTT và thông báo tới các SignalR clients
+// MQTT raspi không TLS
+// MQTT hive là TLS
 var hubContext = app.Services.GetRequiredService<IHubContext<MqttHub>>();
 
 mqttClient.ApplicationMessageReceivedAsync += async e =>

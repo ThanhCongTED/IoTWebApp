@@ -113,6 +113,7 @@ footer {
   align-items: center;
   height: 100vh;
   background: linear-gradient(to bottom, #004e92, #000428); /* Nền gradient */
+  
 }
 
 /* Các nút nhấn (thiết bị) */
@@ -196,4 +197,12 @@ footer {
     margin-top: 25px; /* Khoảng cách giữa điểm và chữ */
     font-size: 16px;
     color: white; /* Màu chữ */
+}
+
+.data-display {
+  position: absolute; /* Để đặt trên nút */
+  top: 120px; /* Cách từ đầu nút xuống */
+  text-align: center; /* Căn giữa nội dung */
+  font-size: 25px; /* Kích thước chữ */
+  color: white; /* Màu chữ cho thông số */
 }

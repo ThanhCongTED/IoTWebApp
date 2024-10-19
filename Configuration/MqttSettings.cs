@@ -9,6 +9,7 @@ namespace IoTWebApp.Configuration
         public string Password { get; set; }
         public string ControlTopic { get; set; }
         public string SubscribeTopic { get; set; }
+        public string TopicPower { get; set; }
     }
 }
 

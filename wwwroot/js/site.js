@@ -11,20 +11,23 @@ const connection = new signalR.HubConnectionBuilder()
 
 // Hàm gửi tin nhắn tới MQTT broker
 function sendMessage(deviceId, status) {
-    const message = status ? "on" : "off";
+    const message = status ? "ON" : "OFF";
     
     let topic = ""; // Định nghĩa biến topic
 
     // Xác định topic dựa trên deviceId
     switch (deviceId) {
         case 1:
-            topic = "topic/device1"; // Topic cho thiết bị 1
+            topic = "ThanhCong/TED90_8773C6/cmnd/POWER"; // Topic cho thiết bị 1
+            topic1 = "ThanhCong/TED90_8773C6/stat/POWER"; // Topic cho thiết bị 1
             break;
         case 2:
-            topic = "topic/device2"; // Topic cho thiết bị 2
+            topic = "ThanhCong/TED90_8773C6/cmnd/POWER2"; // Topic cho thiết bị 2
+            topic1 = "ThanhCong/TED90_8773C6/stat/POWER2"; // Topic cho thiết bị 1
             break;
         case 3:
-            topic = "topic/device3"; // Topic cho thiết bị 3
+            topic = "ThanhCong/TED90_8773C6/cmnd/POWER3"; // Topic cho thiết bị 3
+            topic1 = "ThanhCong/TED90_8773C6/stat/POWER3"; // Topic cho thiết bị 1
             break;
         default:
             console.error("Thiết bị không hợp lệ.");
@@ -32,6 +35,7 @@ function sendMessage(deviceId, status) {
     }
 
     connection.invoke("SendMessage", topic, message) // Gửi topic cùng với message
+    connection.invoke("SendMessage1", topic1, message) // Gửi topic cùng với message
         .catch(err => console.error("Lỗi khi gửi tin nhắn:", err));
 }
 
@@ -89,16 +93,16 @@ connection.start()
             let deviceId;
 
             // Xác định deviceId dựa trên topic
-            if (topic === "topic/device1") {
+            if (topic === "ThanhCong/TED90_8773C6/stat/POWER") {
                 deviceId = 1;
-            } else if (topic === "topic/device2") {
+            } else if (topic === "ThanhCong/TED90_8773C6/stat/POWER2") {
                 deviceId = 2;
-            } else if (topic === "topic/device3") {
+            } else if (topic === "ThanhCong/TED90_8773C6/stat/POWER3") {
                 deviceId = 3;
             }
 
             // Cập nhật trạng thái thiết bị
-            deviceStates[deviceId] = message.trim() === "on";
+            deviceStates[deviceId] = message.trim() === "ON";
             updateButtonState(deviceId);
         });
 
@@ -109,7 +113,7 @@ connection.start()
 connection.on("CurrentState", (initialState) => {
     console.log("Nhận trạng thái ban đầu từ server:", initialState);
     for (let deviceId in initialState) {
-        deviceStates[deviceId] = initialState[deviceId] === "on"; // Cập nhật trạng thái ban đầu từ server
+        deviceStates[deviceId] = initialState[deviceId] === "ON"; // Cập nhật trạng thái ban đầu từ server
         updateButtonState(deviceId); // Cập nhật giao diện
     }
 });

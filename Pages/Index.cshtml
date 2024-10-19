@@ -16,7 +16,17 @@
         <h1>Kết Nối MQTT</h1>
      @* <p>Chạm vào nút để bật/tắt thiết bị và theo dõi trạng thái trong thời gian thực.</p> *@
 
+
 <div class="device-container">
+
+<div class="data-display">
+    <p id="voltage">Điện áp: 0 V</p>
+    <p id="current">Dòng điện: 0 A</p>
+    <p id="power">Công suất: 0 W</p>
+    <p id="powerall">Tổng Công suất: 0 W</p>
+</div>
+
+
 <div id="device1" class="device" onclick="toggleSwitch(1)">
     <span id="indicator1" class="indicator off"></span>
     <span class="device-label">Thiết bị 1</span>
