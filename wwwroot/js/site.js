@@ -1,4 +1,7 @@
-﻿let deviceStates = {
+﻿using IoTWebApp.Hubs;
+using IoTWebApp.Configuration;
+
+let deviceStates = {
     1: false, // Trạng thái của thiết bị 1 (off)
     2: false, // Trạng thái của thiết bị 2 (off)
     3: false   // Trạng thái của thiết bị 3 (off)
@@ -12,38 +15,43 @@ const connection = new signalR.HubConnectionBuilder()
 // Hàm gửi tin nhắn tới MQTT broker
 function sendMessage(deviceId, status) {
     const message = status ? "ON" : "OFF";
-    
-    let topic = ""; // Định nghĩa biến topic
+
+    let topicsend = ""; // Định nghĩa biến topic
+    let topicReceive = ""; // Định nghĩa biến topic
 
     // Xác định topic dựa trên deviceId
     switch (deviceId) {
         case 1:
-            topic = "ThanhCong/TED90_8773C6/cmnd/POWER"; // Topic cho thiết bị 1
-            topic1 = "ThanhCong/TED90_8773C6/stat/POWER"; // Topic cho thiết bị 1
+            topicsend = mqttSettings.TopicSend1();  // Gọi phương thức cho thiết bị 1
+            topicReceive = TopicReceivePOWER(1); // Gọi phương thức cho thiết bị 1
             break;
         case 2:
-            topic = "ThanhCong/TED90_8773C6/cmnd/POWER2"; // Topic cho thiết bị 2
-            topic1 = "ThanhCong/TED90_8773C6/stat/POWER2"; // Topic cho thiết bị 1
+            topicsend = TopicSendPOWER(); // Gọi phương thức cho thiết bị 2
+            topicReceive = TopicReceivePOWER(2); // Gọi phương thức cho thiết bị 2
             break;
         case 3:
-            topic = "ThanhCong/TED90_8773C6/cmnd/POWER3"; // Topic cho thiết bị 3
-            topic1 = "ThanhCong/TED90_8773C6/stat/POWER3"; // Topic cho thiết bị 1
+            topicsend = TopicSendPOWER(); // Gọi phương thức cho thiết bị 3
+            topicReceive = TopicReceivePOWER(3); // Gọi phương thức cho thiết bị 3
             break;
         default:
-            console.error("Thiết bị không hợp lệ.");
+            console.error("Thiết bị không hợp lệ.");  // Ghi log lỗi
             return;
     }
 
-    connection.invoke("SendMessage", topic, message) // Gửi topic cùng với message
-    connection.invoke("SendMessage1", topic1, message) // Gửi topic cùng với message
+    // Gửi tin nhắn tới topic
+    connection.invoke("SendMessage", topicsend, message) // Gửi topic cùng với message
         .catch(err => console.error("Lỗi khi gửi tin nhắn:", err));
+
+    // Nếu bạn cần gửi tin nhận, gọi invoke ở đây
+    connection.invoke("SendMessageReceive", topicReceive, message) // Gửi topic cùng với message
+        .catch(err => console.error("Lỗi khi gửi tin nhắn nhận:", err));
 }
 
 // Hàm để cập nhật giao diện của các nút
 function updateButtonState(deviceId) {
     const device = document.getElementById(`device${deviceId}`);
     const indicator = document.getElementById(`indicator${deviceId}`);
-    
+
     if (deviceStates[deviceId]) {
         device.classList.add("on");
         device.classList.remove("off");
@@ -81,7 +89,7 @@ connection.start()
             .then(initialState => {
                 console.log("Trạng thái ban đầu:", initialState);
                 for (let deviceId in initialState) {
-                    deviceStates[deviceId] = initialState[deviceId] === "on"; // Cập nhật trạng thái ban đầu từ server
+                    deviceStates[deviceId] = initialState[deviceId] === "ON"; // Cập nhật trạng thái ban đầu từ server
                     updateButtonState(deviceId); // Cập nhật giao diện
                 }
             })
@@ -90,30 +98,24 @@ connection.start()
         // Lắng nghe sự kiện khi có tin nhắn MQTT đến từ server
         connection.on("ReceiveMessage", (topic, message) => {
             // Xử lý tin nhắn nhận từ MQTT
-            let deviceId;
+            let deviceId = -1; // Khởi tạo deviceId với giá trị không hợp lệ
 
             // Xác định deviceId dựa trên topic
-            if (topic === "ThanhCong/TED90_8773C6/stat/POWER") {
+            if (topic === TopicReceivePOWER(1)) {
                 deviceId = 1;
-            } else if (topic === "ThanhCong/TED90_8773C6/stat/POWER2") {
+            } else if (topic === TopicReceivePOWER(2)) {
                 deviceId = 2;
-            } else if (topic === "ThanhCong/TED90_8773C6/stat/POWER3") {
+            } else if (topic === TopicReceivePOWER(3)) {
                 deviceId = 3;
             }
 
-            // Cập nhật trạng thái thiết bị
-            deviceStates[deviceId] = message.trim() === "ON";
-            updateButtonState(deviceId);
+            // Kiểm tra nếu deviceId hợp lệ
+            if (deviceId !== -1) {
+                // Cập nhật trạng thái thiết bị
+                deviceStates[deviceId] = message.trim() === "ON";
+                updateButtonState(deviceId);
+            } else {
+                console.error("Device ID không xác định cho topic:", topic);
+            }
         });
-
     })
-    .catch(err => console.error("Lỗi khi kết nối SignalR:", err));
-
-// Gọi phương thức initializeButtonState với trạng thái nhận được từ MQTT
-connection.on("CurrentState", (initialState) => {
-    console.log("Nhận trạng thái ban đầu từ server:", initialState);
-    for (let deviceId in initialState) {
-        deviceStates[deviceId] = initialState[deviceId] === "ON"; // Cập nhật trạng thái ban đầu từ server
-        updateButtonState(deviceId); // Cập nhật giao diện
-    }
-});

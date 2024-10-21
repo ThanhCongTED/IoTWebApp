@@ -66,16 +66,16 @@ await ConnectMqttAsync();
 
 // Đăng ký vào các topics
 var topicFilter = new MqttTopicFilterBuilder()
-    .WithTopic(mqttSettings.SubscribeTopic)
+    .WithTopic(mqttSettings.TopicSend1())
     .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.ExactlyOnce)
     .Build();
 
 await mqttClient.SubscribeAsync(topicFilter);
-Console.WriteLine($"Đã đăng ký vào topic '{mqttSettings.SubscribeTopic}'");
+Console.WriteLine($"Đã đăng ký vào topic '{mqttSettings.SubscribeTopic()}'");
 
 // Khởi tạo lưu trữ tin nhắn
 var receivedMessages = new ConcurrentBag<string>();
-builder.Services.AddSingleton(receivedMessages); // Registering as ConcurrentBag<string>
+builder.Services.AddSingleton(receivedMessages); // Đăng ký dưới dạng ConcurrentBag<string>
 
 // Đăng ký MQTT Client
 builder.Services.AddSingleton<IMqttClient>(mqttClient);
@@ -104,8 +104,6 @@ app.MapControllers();
 app.MapHub<MqttHub>("/mqttHub");
 
 // Xử lý nhận tin nhắn MQTT và thông báo tới các SignalR clients
-// MQTT raspi không TLS
-// MQTT hive là TLS
 var hubContext = app.Services.GetRequiredService<IHubContext<MqttHub>>();
 
 mqttClient.ApplicationMessageReceivedAsync += async e =>

@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.SignalR;
 using MQTTnet;
 using MQTTnet.Client;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace IoTWebApp.Hubs
@@ -8,66 +10,64 @@ namespace IoTWebApp.Hubs
     public class MqttHub : Hub
     {
         private readonly IMqttClient mqttClient;
-
-        // Giả sử trạng thái hiện tại của các thiết bị được lưu trữ tại đây
         private static Dictionary<int, bool> deviceStates = new Dictionary<int, bool>
         {
-            { 1, false }, // Trạng thái của thiết bị 1 (off)
-            { 2, false }, // Trạng thái của thiết bị 2 (off)
-            { 3, false }  // Trạng thái của thiết bị 3 (off)
+            { 1, false }, // Trạng thái thiết bị 1
+            { 2, false }, // Trạng thái thiết bị 2
+            { 3, false }  // Trạng thái thiết bị 3
         };
 
-        // Constructor để inject IMqttClient
         public MqttHub(IMqttClient mqttClient)
         {
             this.mqttClient = mqttClient;
         }
 
-        // Phương thức để gửi tin nhắn đến MQTT broker
-        public async Task SendMessage(string topic1, string message)
+        // Gửi tín hiệu tới MQTT broker
+        public async Task SendMessage(string topic, string message)
         {
-            // Gửi tín hiệu tới MQTT broker
             await mqttClient.PublishAsync(new MqttApplicationMessageBuilder()
-                .WithTopic(topic1) 
+                .WithTopic(topic)
                 .WithPayload(message)
                 .WithQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.ExactlyOnce)
                 .WithRetainFlag()
                 .Build());
-
         }
-        public async Task SendMessage1(string topic, string message)
-        {
 
-            // Cập nhật trạng thái thiết bị
+        // Nhận tín hiệu từ MQTT và cập nhật trạng thái thiết bị
+        public async Task SendMessageReceive(string topic, string message)
+        {
+            if (message != "ON" && message != "OFF")
+                return;
+
             int deviceId = GetDeviceIdFromTopic(topic);
-            if (deviceId > 0)
+            if (deviceId > 0 && deviceStates[deviceId] != (message == "ON"))
             {
                 deviceStates[deviceId] = message == "ON";
                 await Clients.All.SendAsync("ReceiveMessage", topic, message);
             }
         }
 
-        // Phương thức để gửi lại trạng thái ban đầu của các thiết bị khi có kết nối mới
+        // Lấy trạng thái hiện tại của tất cả thiết bị
         public async Task<Dictionary<int, string>> GetCurrentState()
         {
-            // Trả về trạng thái hiện tại của các thiết bị
             var currentState = deviceStates.ToDictionary(
-                x => x.Key, 
+                x => x.Key,
                 x => x.Value ? "ON" : "OFF"
             );
-
             return currentState;
         }
 
+        // Xác định deviceId từ topic
         private int GetDeviceIdFromTopic(string topic)
         {
-            switch (topic)
-            {
-                case "ThanhCong/TED90_8773C6/stat/POWER": return 1;
-                case "ThanhCong/TED90_8773C6/stat/POWER2": return 2;
-                case "ThanhCong/TED90_8773C6/stat/POWER3": return 3;
-                default: return -1;
-            }
+            if (topic.EndsWith("POWER1"))
+                return 1;
+            if (topic.EndsWith("POWER2"))
+                return 2;
+            if (topic.EndsWith("POWER3"))
+                return 3;
+
+            return -1;
         }
     }
 }
