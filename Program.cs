@@ -20,7 +20,7 @@ builder.Services.AddControllers();
 // Cấu hình CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAllOrigins", policyBuilder =>
+    options.AddPolicy("AllowAll", policyBuilder =>
     {
         policyBuilder.AllowAnyOrigin()
                      .AllowAnyMethod()
@@ -33,18 +33,18 @@ builder.Services.AddSignalR();
 
 // Đọc cấu hình MQTT từ appsettings.json
 builder.Services.Configure<MqttSettings>(builder.Configuration.GetSection("Mqtt"));
-var mqttSettings = builder.Configuration.GetSection("Mqtt").Get<MqttSettings>();
 
 // Tạo và cấu hình MQTT client
 var mqttFactory = new MqttFactory();
 var mqttClient = mqttFactory.CreateMqttClient();
 
 // Cấu hình MQTT Client Options từ MqttSettings
+var mqttSettings = builder.Configuration.GetSection("Mqtt").Get<MqttSettings>();
 var mqttOptions = new MqttClientOptionsBuilder()
     .WithClientId(mqttSettings.ClientId)
     .WithTcpServer(mqttSettings.Broker, mqttSettings.Port)
     .WithCredentials(mqttSettings.Username, mqttSettings.Password)
-    .WithCleanSession()
+    .WithCleanSession(false)
     .WithTls()
     .Build();
 
@@ -66,7 +66,7 @@ await ConnectMqttAsync();
 
 // Đăng ký vào các topics
 var topicFilter = new MqttTopicFilterBuilder()
-    .WithTopic(mqttSettings.TopicSend1())
+    .WithTopic(mqttSettings.SubscribeTopic())
     .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.ExactlyOnce)
     .Build();
 
@@ -84,7 +84,7 @@ builder.Services.AddSingleton<IMqttClient>(mqttClient);
 var app = builder.Build();
 
 // Sử dụng CORS
-app.UseCors("AllowAllOrigins");
+app.UseCors("AllowAll");
 
 // Cấu hình pipeline xử lý HTTP request
 if (!app.Environment.IsDevelopment())

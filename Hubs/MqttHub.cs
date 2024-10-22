@@ -1,73 +1,84 @@
 using Microsoft.AspNetCore.SignalR;
 using MQTTnet;
 using MQTTnet.Client;
-using System.Collections.Generic;
-using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using IoTWebApp.Configuration;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options; // Thêm dòng này
 
 namespace IoTWebApp.Hubs
 {
     public class MqttHub : Hub
     {
-        private readonly IMqttClient mqttClient;
+        private readonly IMqttClient _mqttClient;
+        private readonly MqttSettings _mqttSettings;
+
+        public MqttHub(IMqttClient mqttClient, IOptions<MqttSettings> mqttSettings) 
+        {
+            _mqttClient = mqttClient;
+            _mqttSettings = mqttSettings.Value; // Nhận cấu hình MqttSettings từ DI
+        }
         private static Dictionary<int, bool> deviceStates = new Dictionary<int, bool>
         {
-            { 1, false }, // Trạng thái thiết bị 1
-            { 2, false }, // Trạng thái thiết bị 2
-            { 3, false }  // Trạng thái thiết bị 3
+            { 1, false }, // Trạng thái của thiết bị 1 (off)
+            { 2, false }, // Trạng thái của thiết bị 2 (off)
+            { 3, false }  // Trạng thái của thiết bị 3 (off)
         };
 
-        public MqttHub(IMqttClient mqttClient)
-        {
-            this.mqttClient = mqttClient;
-        }
-
-        // Gửi tín hiệu tới MQTT broker
         public async Task SendMessage(string topic, string message)
         {
-            await mqttClient.PublishAsync(new MqttApplicationMessageBuilder()
-                .WithTopic(topic)
-                .WithPayload(message)
-                .WithQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.ExactlyOnce)
-                .WithRetainFlag()
-                .Build());
-        }
-
-        // Nhận tín hiệu từ MQTT và cập nhật trạng thái thiết bị
-        public async Task SendMessageReceive(string topic, string message)
-        {
-            if (message != "ON" && message != "OFF")
-                return;
-
-            int deviceId = GetDeviceIdFromTopic(topic);
-            if (deviceId > 0 && deviceStates[deviceId] != (message == "ON"))
+            if (_mqttClient.IsConnected)
             {
-                deviceStates[deviceId] = message == "ON";
-                await Clients.All.SendAsync("ReceiveMessage", topic, message);
+                try
+                {
+                    // Xây dựng tin nhắn MQTT
+                    var mqttMessage = new MqttApplicationMessageBuilder()
+                        .WithTopic(topic)
+                        .WithPayload(Encoding.UTF8.GetBytes(message))
+                        .WithQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.ExactlyOnce)
+                        .WithRetainFlag(true)
+                        .Build();
+
+                    // Gửi tin nhắn
+                    await _mqttClient.PublishAsync(mqttMessage);
+                    //Console.WriteLine($"Đã gửi tin nhắn '{message}' đến topic '{topic}'deviceId '{deviceId}'");
+                                // Cập nhật trạng thái thiết bị
+                    
+        
+                        //deviceStates[deviceId] = message == "on";
+                    //await Clients.All.SendAsync("ReceiveMessage",topic, message); trạng thai nút nhấn lấy ở MQTT
+
+                    Console.WriteLine($"Đã gửi tin nhắn '{message}' đến topic '{topic}'");
+                
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Lỗi khi gửi tin nhắn: {ex.Message}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("MQTT client chưa được kết nối.");
             }
         }
 
-        // Lấy trạng thái hiện tại của tất cả thiết bị
+
+        public Task<MqttSettings> GetMqttSettings()
+        {
+            return Task.FromResult(_mqttSettings); // Trả về cấu hình MqttSettings
+        }
+
         public async Task<Dictionary<int, string>> GetCurrentState()
         {
+            // Trả về trạng thái hiện tại của các thiết bị
             var currentState = deviceStates.ToDictionary(
-                x => x.Key,
-                x => x.Value ? "ON" : "OFF"
+                x => x.Key, 
+                x => x.Value ? "on" : "off"
             );
+
             return currentState;
         }
 
-        // Xác định deviceId từ topic
-        private int GetDeviceIdFromTopic(string topic)
-        {
-            if (topic.EndsWith("POWER1"))
-                return 1;
-            if (topic.EndsWith("POWER2"))
-                return 2;
-            if (topic.EndsWith("POWER3"))
-                return 3;
-
-            return -1;
-        }
     }
 }
