@@ -96,6 +96,31 @@ function updateButtonState(deviceId) {
     }
 }
 
+
+function updateDeviceonline(message) {
+    
+        for (let deviceId = 1; deviceId <= 3; deviceId++) { // Giả sử bạn có 3 thiết bị
+            if (message === "Offline") {
+                // Thay đổi trạng thái nút hoặc khóa nút khi thiết bị offline
+                document.getElementById(`device${deviceId}`).classList.remove("off");
+                document.getElementById(`device${deviceId}`).classList.remove("on");
+                document.getElementById(`device${deviceId}`).classList.add("offline");
+                document.getElementById(`indicator${deviceId}`).classList.add("offline");
+                document.getElementById(`device${deviceId}`).disabled = true; // Vô hiệu hóa nút
+                document.getElementById('statusText').innerText = `Thiết bị: ${message}`;
+
+            } else {
+                document.getElementById(`device${deviceId}`).classList.remove("offline");
+                document.getElementById(`indicator${deviceId}`).classList.remove("offline");
+                document.getElementById(`device${deviceId}`).disabled = false; // Kích hoạt lại nút
+                document.getElementById('statusText').innerText = `Thiết bị: ${message}`;
+
+            }
+        }
+    
+    }
+
+
 // Hàm để bật/tắt nút
 function toggleSwitch(deviceId) {
     deviceStates[deviceId] = !deviceStates[deviceId]; // Chuyển đổi trạng thái
@@ -144,7 +169,7 @@ function updateStateSensor(message){
 // Cập nhật giao diện (nếu cần thiết)
         document.getElementById('voltage').innerText = `Điện Áp: ${HVoltage} V`;
         document.getElementById('current').innerText = `Dòng Điện: ${HCurrent} A`;
-        document.getElementById('Today').innerText = `Công suất Hôm Nay: ${todayEnergy}KW/H`;
+        document.getElementById('Today').innerText = `Công suất Hôm Nay: ${todayEnergy}KW`;
         document.getElementById('Total').innerText = `Tổng Công suất: ${totalEnergy}KW`;
     } else {
     console.error("ENERGY object is undefined or not available in the message.");
@@ -237,7 +262,7 @@ connection.start()
                 else if (topic === LWT_Topic ) {
 
                     console.log("Trạng Thái Thiết Bị:", message);
-                    
+                    updateDeviceonline(message)
 
                 }    
                 else if (topic === Senesor_Topic ) {

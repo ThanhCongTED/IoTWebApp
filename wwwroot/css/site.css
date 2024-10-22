@@ -147,12 +147,21 @@ footer {
   box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2); /* Bóng thụt vào khi bật */
 }
 
+.device.offline {
+  background-color: #6c757d; /* Màu xám khi thiết bị offline */
+  cursor: not-allowed;
+}
+
 /* Hiển thị nhãn của thiết bị */
 .device p {
   position: absolute;
   bottom: 10px;
   font-size: 16px;
+  margin-top: 25px; /* Khoảng cách giữa điểm và chữ */
+  font-size: 16px;
+  color: white; /* Màu chữ */
 }
+
 
 /* Cạnh dưới của nút chuyển động */
 .device::before {
@@ -192,12 +201,10 @@ footer {
     background-color:  #0660dd; /* Màu đỏ cho trạng thái Off */
 }
 
-/* Định dạng nhãn thiết bị */
-.device p {
-    margin-top: 25px; /* Khoảng cách giữa điểm và chữ */
-    font-size: 16px;
-    color: white; /* Màu chữ */
+.indicator.offline {
+    background-color:  #000000; /* Màu đỏ cho trạng thái Off */
 }
+
 
 .data-display {
   position: absolute; /* Để đặt trên nút */
@@ -205,4 +212,47 @@ footer {
   text-align: center; /* Căn giữa nội dung */
   font-size: 25px; /* Kích thước chữ */
   color: white; /* Màu chữ cho thông số */
+}
+
+.data-display.offline {
+  position: absolute; /* Để đặt trên nút */
+  top: 120px; /* Cách từ đầu nút xuống */
+  text-align: center; /* Căn giữa nội dung */
+  font-size: 25px; /* Kích thước chữ */
+  color:  #3a7bd5; /* Màu chữ cho thông số */
+}
+
+.offline {
+  background-color: gray; /* Màu sắc khi thiết bị offline */
+  cursor: not-allowed; /* Thay đổi kiểu con trỏ khi không thể nhấn */
+  pointer-events: none; /* Khóa sự kiện click */
+
+}
+
+/* CSS cho trạng thái thiết bị offline */
+.device-button.offline {
+  background-color: #6c757d; /* Màu xám khi thiết bị offline */
+  cursor: not-allowed;
+}
+/* Indicator khi thiết bị offline */
+.device-indicator.offline {
+  background-color: #6c757d;
+}
+
+
+/* CSS cho các thông tin cảm biến (Sensor data) */
+.sensor-data {
+  margin-top: 30px;
+}
+
+.sensor-data h2 {
+  font-size: 24px;
+  margin-bottom: 15px;
+  color: #007bff;
+}
+
+.sensor-data p {
+  font-size: 18px;
+  margin: 5px 0;
+  color: #333;
 }

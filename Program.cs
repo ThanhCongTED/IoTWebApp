@@ -44,7 +44,7 @@ var mqttOptions = new MqttClientOptionsBuilder()
     .WithClientId(mqttSettings.ClientId)
     .WithTcpServer(mqttSettings.Broker, mqttSettings.Port)
     .WithCredentials(mqttSettings.Username, mqttSettings.Password)
-    .WithCleanSession(false)
+    .WithCleanSession()
     .WithTls()
     .Build();
 
