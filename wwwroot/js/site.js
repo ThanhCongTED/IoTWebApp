@@ -131,14 +131,14 @@ function updateStateSensor(message){
     if (parsedMessage && parsedMessage.ENERGY) {
 // Truy cập các giá trị từ ENERGY
         let HVoltage = parsedMessage.ENERGY.Voltage;
-        let HCurrent = parsedMessage.ENERGY.Current;
-        let totalEnergy = parsedMessage.ENERGY.Total;
-        let todayEnergy = parsedMessage.ENERGY.Today;   
+        let HCurrent = parsedMessage.ENERGY.Current.toFixed(1);
+        let totalEnergy = Math.round(parsedMessage.ENERGY.Total);
+        let todayEnergy = Math.round(parsedMessage.ENERGY.Today);   
 
-        //console.log("Điện Áp:", HVoltage); // In ra giá trị Total
-        //console.log("Dòng Điện:", HCurrent); // In ra giá trị Today
-        //console.log("Total Energy:", totalEnergy); // In ra giá trị Total
-        //console.log("Today's Energy:", todayEnergy); // In ra giá trị Today
+        console.log("Điện Áp:", HVoltage); // In ra giá trị Total
+        console.log("Dòng Điện:", HCurrent); // In ra giá trị Today
+        console.log("Total Energy:", totalEnergy); // In ra giá trị Total
+        console.log("Today's Energy:", todayEnergy); // In ra giá trị Today
 
 
 // Cập nhật giao diện (nếu cần thiết)
@@ -243,7 +243,7 @@ connection.start()
                 else if (topic === Senesor_Topic ) {
 
                 // In toàn bộ message để kiểm tra
-                    console.log("Received message:", message);
+                    //console.log("Received message:", message);
                     updateStateSensor(message);
 
                 }    
